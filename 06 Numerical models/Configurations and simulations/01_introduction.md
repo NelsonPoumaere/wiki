@@ -1,0 +1,2 @@
+# Configurations and simulations
+In this folder, you will find pages with a log of different configurations and simulations that have been run by different members of the research group. Each page will correspond to the basic model configuration, and within each page will be a brief description of the configuration, a list of different simulations that have been conducted, and links/locations for where the configuration and model output can be found.

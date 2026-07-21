@@ -11,6 +11,8 @@ This is a living document, edited by members of the group. The content is subjec
 5. Push your changes back to Github.
 6. Submit a pull request to the main repository.
 
+📣 1 pull request = 1 🍺 or 1 🍦 📣
+
 # Guidelines for contributions
 
 Edits and additions to this wiki are warmly encouraged. Here are a few principles to keep in mind when writing or editing a page:
