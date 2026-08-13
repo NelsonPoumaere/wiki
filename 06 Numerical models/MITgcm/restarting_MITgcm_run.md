@@ -5,7 +5,7 @@
 Due to wall times on computing clusters, one must often conduct a numerical experiment in several consecutive runs.
 For example, on Archer2, the wall time is 24 hours, so if a specific experiment takes e.g. 4 days of real time computation, one will have to restart the model 3 times.
 Having to do that manually by copying config and restart files from one run to the next can become real tedious real fast (longer experiments, different parameters, etc).
-The following shows how to automate that in MITgcm thanks to a bash script.
+The following shows how to automate that for MITgcm thanks to a bash script.
 
 **Disclaimer: This is only one way of doing this, and there surely is a more clever one out there! Also, it is rather specific to the contributor's configuration: adapt it to your needs!** 
 
@@ -36,7 +36,7 @@ Let's look at an example structure for a MITgcm experiment:
 
 The `build/` directory contains the executable `mitgcmuv` built from the files contained in the `code/` directory. 
 The `input\` directory contains all the input files required for any experiment; we'll use symbolic links in each run directory to avoid unnecessary copying.
-In `experiments/`, there are several directories each corresponding to one specific experiment e.g. a parameter value.
+In `experiments/`, there are several directories each corresponding to one specific experiment (e.g. a parameter value).
 In each of these specific experiment directories, there's a succession of directories: `run0`, `run1/`, `run2/`, etc, each containing one part of the full experiment, and each being restarted from the previous one.
 Thus, `run0/` contains the initial run. Each of these run directories contains runtime parameters files `data*`, 
 a slurm submitting file `run_MITgcm.slurm`, a file `organize` containing "cleaning commands" for when a run is finished, symbolic links to the input files `*bins`, and directories `OUTPUT_i/` and `PICKUP/`
@@ -44,7 +44,7 @@ containing, you guessed it, output and pickup files respectively.
 
 ## Restarting a run
 
-Let's a run is just finished, e.g. `run2/`. One then runs `source organize` in the `run2` directory, which simply serves to have a clean-ish and consistent run directory structure:
+Let's say a run is just finished, e.g. `run2/`. One then runs `source organize` in the `run2/` directory, which simply serves to have a clean-ish and consistent run directory structure:
 ```bash
 > cat organize
 mkdir PICKUP
@@ -54,14 +54,14 @@ mv STDOUT.0000 OUTPUT_*/
 rm STDOUT.*
 mv *.data *.meta available_diagnostics.log ocean_stats.*.txt OUTPUT_*/
 ```
-After that, go in the parent directory, type the command `./restart_run.sh run2` (without the `/`), and hit enter.
-This will create a directory `run3/`, copy config and pickup files, modify the config files accordingly.
+After that, go in the parent directory, type the command `./restart_run.sh run2` (without the `/` in `run2`), and hit enter.
+This will create a directory `run3/`, copy config and pickup files and modify the config files accordingly.
 For example, one needs to change the `nIter0` parameter in `data` so that the model knows what pickup file to restart and when it is in the global calculation.
 
 Following below is the `restart_run.sh` bash script, which hopefully should be self-explanatory enough.
 Among other things, it works out the name and time step number of the most recent pickup file.
-Based on the model time step size `dt`, it lets you know the current year of the computation (based on 360 days calendar).
-It lets you decide whether you want to submit the new job immediately or not, in case you might to e.g. add a diagnostic in `data.diagnostics`.
+Based on the model time step size `dt`, it lets you know the current year of the computation (based on a 360 days calendar).
+It lets you decide whether you want to submit the new job immediately or not, in case you might want to e.g. add a diagnostic in `data.diagnostics`.
 ```bash
 #!/bin/bash
 
@@ -174,7 +174,7 @@ fi
 sbatch ./run_MITgcm.slurm
 ```
 
-And here is the SLURM submission file `run_MITgcm.slurm`, for completeness:
+And here is the SLURM submission file `run_MITgcm.slurm` (specific to the Archer2 computing cluster), for completeness:
 ```bash
 #!/bin/bash
 
